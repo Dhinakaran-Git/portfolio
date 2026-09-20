@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 import {
   Mail,
   Phone,
@@ -13,6 +14,10 @@ import {
 } from 'lucide-react';
 
 export const Contact = () => {
+  const emailServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const emailTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const emailPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -53,23 +58,32 @@ export const Contact = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
     setStatus('submitting');
-    const emailBody = [
-      `Name: ${formData.name}`,
-      `Email: ${formData.email}`,
-      '',
-      formData.message,
-    ].join('\n');
-    const mailtoUrl = `mailto:dhinakaranmurugesan18@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(emailBody)}`;
 
-    window.location.href = mailtoUrl;
-    setStatus('success');
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    setTimeout(() => setStatus('idle'), 6000);
+    try {
+      await emailjs.send(
+        emailServiceId,
+        emailTemplateId,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          to_email: 'dhinakaranmurugesan18@gmail.com',
+        },
+        emailPublicKey,
+      );
+      setStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setTimeout(() => setStatus('idle'), 6000);
+    } catch (error) {
+      console.error('EmailJS submission failed:', error);
+      setStatus('error');
+    }
   };
 
   return (
@@ -172,7 +186,7 @@ export const Contact = () => {
                 Send a Message
               </h3>
                 <p className="text-xs sm:text-sm text-slate-400 mb-6">
-                Fill out the form below and your email app will open with the message addressed to dhinakaranmurugesan18@gmail.com.
+                Fill out the form below and your message will be sent directly to dhinakaranmurugesan18@gmail.com.
               </p>
 
               {/* Success Banner */}
@@ -186,9 +200,25 @@ export const Contact = () => {
                   >
                     <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <div>
-                        <span className="font-bold">Your email app is ready!</span>
+                        <span className="font-bold">Message sent successfully!</span>
                       <p className="text-xs text-emerald-400/80 mt-0.5">
-                        Review the message and click Send to deliver it.
+                        Thank you for reaching out. I will get back to you soon.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+                {status === 'error' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="mb-6 p-4 rounded-xl bg-red-950/40 border border-red-500/50 flex items-start gap-3 text-red-300 text-sm"
+                  >
+                    <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-bold">Message could not be sent.</span>
+                      <p className="text-xs text-red-400/80 mt-0.5">
+                        Please try again or email dhinakaranmurugesan18@gmail.com directly.
                       </p>
                     </div>
                   </motion.div>
@@ -300,7 +330,7 @@ export const Contact = () => {
                     {status === 'submitting' ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin text-white" />
-                        <span>Validating & Staging...</span>
+                        <span>Sending...</span>
                       </>
                     ) : (
                       <>
@@ -311,7 +341,7 @@ export const Contact = () => {
                   </button>
 
                   <span className="text-[11px] font-mono text-slate-500">
-                    * Ready for email service / backend API integration
+                    * Your message is sent securely through EmailJS
                   </span>
                 </div>
 
