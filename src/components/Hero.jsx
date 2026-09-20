@@ -14,10 +14,9 @@ import {
 
 export const Hero = () => {
   const [downloadNotice, setDownloadNotice] = useState(false);
-  const resumeUrl = "/resume/Dhinakaran-Murugesan-Resume.pdf";
+  const resumeUrl = "/resume/Dhinakaran-JavaFullStack.pdf";
 
   const handleDownloadResume = (e) => {
-    // Show polite notification that the resume is configured at /resume/Dhinakaran-Murugesan-Resume.pdf
     setDownloadNotice(true);
     setTimeout(() => setDownloadNotice(false), 4000);
   };
@@ -93,7 +92,7 @@ export const Hero = () => {
 
               <a
                 href={resumeUrl}
-                download="Dhinakaran-Murugesan-Resume.pdf"
+                download="Dhinakaran-JavaFullStack.pdf"
                 onClick={handleDownloadResume}
                 className="w-full sm:w-auto text-center px-6 py-3 rounded-lg font-medium text-sm text-slate-200 bg-slate-900/70 hover:bg-slate-800/80 border border-slate-700 hover:border-blue-400/50 transition-all duration-300 flex items-center justify-center gap-2"
               >
@@ -118,7 +117,7 @@ export const Hero = () => {
                 className="mt-3 text-xs font-mono text-cyan-400 flex items-center gap-2 bg-blue-950/60 px-3 py-2 rounded border border-blue-800/50"
               >
                 <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Resume link triggered: /resume/Dhinakaran-Murugesan-Resume.pdf</span>
+                <span>Resume download started.</span>
               </motion.div>
             )}
 

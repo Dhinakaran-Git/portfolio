@@ -1,5 +1,5 @@
 Place your actual PDF resume file here named:
-Dhinakaran-Murugesan-Resume.pdf
+Dhinakaran-JavaFullStack.pdf
 
 The "Download Resume" button in the portfolio is configured to download:
-/resume/Dhinakaran-Murugesan-Resume.pdf
+/resume/Dhinakaran-JavaFullStack.pdf
