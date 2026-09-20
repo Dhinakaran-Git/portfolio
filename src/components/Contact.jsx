@@ -58,12 +58,18 @@ export const Contact = () => {
     if (!validate()) return;
 
     setStatus('submitting');
-    // Simulate real network submission for UI demonstration
-    setTimeout(() => {
-      setStatus('success');
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setTimeout(() => setStatus('idle'), 6000);
-    }, 1200);
+    const emailBody = [
+      `Name: ${formData.name}`,
+      `Email: ${formData.email}`,
+      '',
+      formData.message,
+    ].join('\n');
+    const mailtoUrl = `mailto:dhinakaranmurugesan18@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(emailBody)}`;
+
+    window.location.href = mailtoUrl;
+    setStatus('success');
+    setFormData({ name: '', email: '', subject: '', message: '' });
+    setTimeout(() => setStatus('idle'), 6000);
   };
 
   return (
@@ -165,8 +171,8 @@ export const Contact = () => {
               <h3 className="text-xl font-bold text-white mb-2">
                 Send a Message
               </h3>
-              <p className="text-xs sm:text-sm text-slate-400 mb-6">
-                Fill out the form below. Client-side validation is active and input will be staged for submission.
+                <p className="text-xs sm:text-sm text-slate-400 mb-6">
+                Fill out the form below and your email app will open with the message addressed to dhinakaranmurugesan18@gmail.com.
               </p>
 
               {/* Success Banner */}
@@ -180,9 +186,9 @@ export const Contact = () => {
                   >
                     <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold">Message staged successfully!</span>
+                        <span className="font-bold">Your email app is ready!</span>
                       <p className="text-xs text-emerald-400/80 mt-0.5">
-                        Thank you for reaching out. In a live production environment, this payload connects directly to your preferred email API (e.g. EmailJS, Resend, or Spring Boot REST backend).
+                        Review the message and click Send to deliver it.
                       </p>
                     </div>
                   </motion.div>
